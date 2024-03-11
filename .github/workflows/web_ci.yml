@@ -1,0 +1,21 @@
+name: Web CI
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+        - "web/**"
+  pull_request:
+
+jobs:
+  api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install modules
+        run: yarn
+      - name: Run ESLint
+        run: yarn lint
+      - name: Run unit tests
+        run: yarn test
