@@ -30,14 +30,12 @@ jobs:
           ruby-version: '3.2.2'
           bundler-cache: true
           cache-version: 0
-      - name: Debugging
-        run: ls
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v3
       - name: Build with Jekyll
         working-directory: "docs/"
-        run: bundle exec jekyll build
+        run: pwd && ls && bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}
         env:
           JEKYLL_ENV: production
       - name: Upload artifact
