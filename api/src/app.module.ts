@@ -3,6 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from "@nestjs/config";
+import { UsersController } from './users/users.controller';
+import { UsersModule } from './users/users.module';
 import * as Joi from 'joi';
 
 @Module({
@@ -13,9 +15,10 @@ import * as Joi from 'joi';
         DATABASE_URL: Joi.string()
       })
     }),
-    DatabaseModule
+    DatabaseModule,
+    UsersModule
   ],
-  controllers: [AppController],
+  controllers: [AppController, UsersController],
   providers: [AppService],
 })
 export class AppModule { }
