@@ -1,3 +1,1 @@
-export class UserVM {
-
-}
+export class UserVM {}

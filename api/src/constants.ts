@@ -1,3 +1,3 @@
 export const envVars = {
-    'db_url': 'DATABASE_URL'
-}
+  db_url: 'DATABASE_URL',
+};
