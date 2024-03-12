@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { EmailLoginDto } from './dtos/email-login.dto';
 import { RegisterDto } from './dtos/register.dto';
 import { Response } from 'express';
-import { isDevelopment } from 'src/utility/env.utility';
+import { isDevelopment } from '../utility/env.utility';
 
 @Controller('auth')
 export class AuthController {

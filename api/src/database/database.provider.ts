@@ -1,7 +1,7 @@
 import { Provider } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Client } from 'pg';
-import { envVars } from 'src/constants';
+import { envVars } from '../constants';
 
 export const databaseProviders: Provider[] = [
   {

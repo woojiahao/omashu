@@ -4,7 +4,7 @@ import {
   HttpStatus,
   Injectable,
 } from '@nestjs/common';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from '../users/users.service';
 import { RegisterDto } from './dtos/register.dto';
 import { JwtService } from '@nestjs/jwt';
 import { EmailLoginDto } from './dtos/email-login.dto';
