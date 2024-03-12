@@ -4,3 +4,7 @@
 
 layout: home
 ---
+
+# Omashu
+
+> Coordinate book club sessions and share annotations with your friends!
