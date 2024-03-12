@@ -16,6 +16,7 @@ Omashu is based off of the city of Omashu in Avatar: The Last Airbender where it
 
 - [System planning](https://woojiahao.notion.site/Omashu-ccefcb32d22e43f19727ceeab62272d9?pvs=4)
 - [Issue tracker](https://github.com/woojiahao/omashu/issues)
+- [Postman](https://www.postman.com/woojiahao-personal/workspace/omashu/overview)
 
 ## Contributing
 
