@@ -7,7 +7,7 @@ import { isDevelopment } from 'src/utility/env.utility';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService) {}
 
   @Post('/register')
   @HttpCode(204)
@@ -17,14 +17,22 @@ export class AuthController {
 
   @Post('/login/email')
   @HttpCode(204)
-  async loginWithEmail(@Body() loginDto: EmailLoginDto, @Res({ passthrough: true }) resp: Response) {
-    const { accessToken, refreshToken } = await this.authService.loginWithEmail(loginDto);
+  async loginWithEmail(
+    @Body() loginDto: EmailLoginDto,
+    @Res({ passthrough: true }) resp: Response,
+  ) {
+    const { accessToken, refreshToken } = await this.authService.loginWithEmail(
+      loginDto,
+    );
     const sameSite = isDevelopment() ? 'lax' : 'strict';
     resp.cookie('access', accessToken, { httpOnly: true, sameSite: sameSite });
-    resp.cookie('refresh', refreshToken, { httpOnly: true, sameSite: sameSite });
+    resp.cookie('refresh', refreshToken, {
+      httpOnly: true,
+      sameSite: sameSite,
+    });
   }
 
   @Post('/login/google')
   @HttpCode(204)
-  async loginWithGoogle() { }
+  async loginWithGoogle() {}
 }

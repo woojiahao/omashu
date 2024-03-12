@@ -16,14 +16,14 @@ interface JwtPayload {
 }
 
 type JwtToken = string;
-type JwtTokenPair = { accessToken: JwtToken, refreshToken: JwtToken };
+type JwtTokenPair = { accessToken: JwtToken; refreshToken: JwtToken };
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-  ) { }
+  ) {}
 
   async register(registerDto: RegisterDto) {
     if (await this.usersService.getUserByEmail(registerDto.email)) {
@@ -80,7 +80,7 @@ export class AuthService {
     return {
       accessToken,
       refreshToken,
-    }
+    };
   }
 
   /**
@@ -93,8 +93,8 @@ export class AuthService {
     expiry: number,
   ): Promise<JwtToken> {
     const token = await this.jwtService.signAsync(payload, {
-    expiresIn: `${expiry}s`
-  });
+      expiresIn: `${expiry}s`,
+    });
     return token;
   }
 }

@@ -10,6 +10,10 @@ export class UsersService {
     return await this.usersRepository.getUsers();
   }
 
+  async getUserById(id: string) {
+    return await this.usersRepository.getUserById(id);
+  }
+
   async getUserByEmail(email: string) {
     return await this.usersRepository.getUserByEmail(email);
   }
