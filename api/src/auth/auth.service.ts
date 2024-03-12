@@ -10,6 +10,14 @@ import { JwtService } from '@nestjs/jwt';
 import { EmailLoginDto } from './dtos/email-login.dto';
 import * as bcrypt from 'bcrypt';
 
+interface JwtPayload {
+  sub: string;
+  id: string;
+}
+
+type JwtToken = string;
+type JwtTokenPair = { accessToken: JwtToken, refreshToken: JwtToken };
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -45,7 +53,7 @@ export class AuthService {
     );
   }
 
-  async loginWithEmail(emailLoginDto: EmailLoginDto): Promise<{ accessToken: string, refreshToken: string }> {
+  async loginWithEmail(emailLoginDto: EmailLoginDto): Promise<JwtTokenPair> {
     const user = await this.usersService.getUserByEmail(emailLoginDto.email);
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
@@ -59,11 +67,13 @@ export class AuthService {
       throw new HttpException('Invalid password', HttpStatus.UNAUTHORIZED);
     }
 
-    const payload = {
+    return this.issueTokens({
       sub: user.id,
       id: user.id,
-    };
+    });
+  }
 
+  private async issueTokens(payload: JwtPayload): Promise<JwtTokenPair> {
     const accessToken = await this.generateJwtToken(payload, 60 * 5);
     const refreshToken = await this.generateJwtToken(payload, 60 * 60 * 24 * 7);
 
@@ -74,17 +84,17 @@ export class AuthService {
   }
 
   /**
-   *
+   * Generate JWT token given payload with user id
    * @param payload Payload to include in token
    * @param expiry Expiry duration expressed in seconds
    */
   private async generateJwtToken(
-    payload: { sub: string; id: string },
+    payload: JwtPayload,
     expiry: number,
-  ) {
+  ): Promise<JwtToken> {
     const token = await this.jwtService.signAsync(payload, {
-      expiresIn: `${expiry}s`
-    });
+    expiresIn: `${expiry}s`
+  });
     return token;
   }
 }
