@@ -18,13 +18,11 @@ export class UsersService {
     return await this.usersRepository.getUserByUsername(username);
   }
 
-  async createUser(email: string, username: string, password: string | null) {
-    let passwordHash: string | null = null;
-    const saltRounds = 10;
-    if (password) {
-      passwordHash = await bcrypt.hash(password, saltRounds);
-    }
-
+  async createUser(
+    email: string,
+    username: string,
+    passwordHash: string | null,
+  ) {
     await this.usersRepository.createUser(email, username, passwordHash);
   }
 }
