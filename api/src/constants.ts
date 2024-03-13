@@ -3,3 +3,5 @@ export const envVars = {
   test_db_url: 'TEST_DATABASE_URL',
   jwt_secret: 'JWT_SECRET',
 } as const;
+
+export const IS_PUBLIC_KEY = 'isPublic' as const;

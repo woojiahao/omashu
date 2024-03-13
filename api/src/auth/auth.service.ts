@@ -3,27 +3,31 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { RegisterDto } from './dtos/register.dto';
 import { JwtService } from '@nestjs/jwt';
 import { EmailLoginDto } from './dtos/email-login.dto';
 import * as bcrypt from 'bcrypt';
+import { ConfigService } from '@nestjs/config';
+import { envVars } from '../constants';
 
-interface JwtPayload {
+export interface JwtPayload {
   sub: string;
   id: string;
 }
 
 type JwtToken = string;
-type JwtTokenPair = { accessToken: JwtToken; refreshToken: JwtToken };
+export type JwtTokenPair = { accessToken: JwtToken; refreshToken: JwtToken };
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-  ) {}
+    private configService: ConfigService,
+  ) { }
 
   async register(registerDto: RegisterDto) {
     if (await this.usersService.getUserByEmail(registerDto.email)) {
@@ -71,6 +75,19 @@ export class AuthService {
       sub: user.id,
       id: user.id,
     });
+  }
+
+  async refreshToken(refreshToken: string) {
+    try {
+      const payload: JwtPayload = await this.jwtService.verifyAsync(refreshToken, {
+        secret: this.configService.getOrThrow<string>(envVars.jwt_secret),
+      });
+
+      // Reuse the old payload but update the refresh timings
+      return await this.issueTokens(payload);
+    } catch (e) {
+      throw new UnauthorizedException('Cannot refresh token');
+    }
   }
 
   private async issueTokens(payload: JwtPayload): Promise<JwtTokenPair> {
