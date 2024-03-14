@@ -1,4 +1,4 @@
-import { api } from "../customAxios";
+import { api, generateApi } from "../customAxios";
 
 export async function loginWithEmail(email: string, password: string) {
   // TODO: Raise exception here or move it to the login call
@@ -21,5 +21,6 @@ export async function logoutUser() {
 }
 
 export async function refreshToken() {
-  await api.post('/auth/refresh');
+  const tempApi = generateApi();
+  await tempApi.post('/auth/refresh');
 }

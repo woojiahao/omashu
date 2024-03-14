@@ -4,7 +4,6 @@ import { EmailLoginDto } from './dtos/email-login.dto';
 import { RegisterDto } from './dtos/register.dto';
 import { Response, Request, response } from 'express';
 import { isDevelopment } from '../utility/env.utility';
-import { accessSync } from 'fs';
 
 @Controller('auth')
 export class AuthController {
@@ -54,6 +53,7 @@ export class AuthController {
     } catch (e) {
       response.clearCookie('access');
       response.clearCookie('refresh');
+      response.end();
       throw e;
     }
   }

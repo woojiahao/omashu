@@ -1,9 +1,15 @@
 import Layout from "../../components/Layout";
 import { useUserContext } from "../../contexts/userContext";
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
-  const { user, login } = useUserContext();
+  const { user, login, isLoading } = useUserContext();
+  const navigate = useNavigate();
+
+  if (!isLoading && user) {
+    navigate('/');
+  }
 
   async function loginUser(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -14,11 +20,20 @@ export default function Login() {
 
     // TODO: Add status to this
     await login(target.email.value, target.password.value);
+    navigate('/');
   }
 
   useEffect(() => {
-    console.log(user);
+    if (!isLoading && user) {
+      navigate('/');
+    }
   }, [user]);
+
+  useEffect(() => {
+    if (!isLoading && user) {
+      navigate('/');
+    }
+  }, [isLoading]);
 
   return (
     <Layout>

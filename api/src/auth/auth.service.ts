@@ -91,7 +91,8 @@ export class AuthService {
   }
 
   private async issueTokens(payload: JwtPayload): Promise<JwtTokenPair> {
-    const accessToken = await this.generateJwtToken(payload, 60 * 5);
+    // const accessToken = await this.generateJwtToken(payload, 60 * 5);
+    const accessToken = await this.generateJwtToken(payload, 1 * 5);
     const refreshToken = await this.generateJwtToken(payload, 60 * 60 * 24 * 7);
 
     return {
