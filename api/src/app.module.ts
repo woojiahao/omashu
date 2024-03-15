@@ -15,6 +15,10 @@ import { UsersModule } from './users/users.module';
       validationSchema: Joi.object({
         DATABASE_URL: Joi.string(),
         JWT_SECRET: Joi.string(),
+        EMAIL_HOST: Joi.string(),
+        EMAIL_PORT: Joi.number(),
+        EMAIL_USERNAME: Joi.string().email(),
+        EMAIL_PASSWORD: Joi.string(),
       }),
     }),
     DatabaseModule,

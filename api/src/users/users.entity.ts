@@ -3,4 +3,5 @@ export interface User {
   email: string;
   password_hash: string | null;
   username: string;
+  is_verified: boolean;
 }

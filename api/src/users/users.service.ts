@@ -28,4 +28,8 @@ export class UsersService {
   ) {
     await this.usersRepository.createUser(email, username, passwordHash);
   }
+
+  async verifyUser(id: string) {
+    await this.usersRepository.verifyUser(id);
+  }
 }

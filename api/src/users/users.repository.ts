@@ -92,4 +92,18 @@ export class UsersRepository {
       );
     }
   }
+
+  async verifyUser(id: string) {
+    try {
+      await this.client.query(
+        'update users set is_verified = true where id = $1',
+        [id],
+      );
+    } catch (e) {
+      throw new HttpException(
+        'Something went wrong when verifying user',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }

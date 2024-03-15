@@ -4,6 +4,7 @@ import { isDevelopment } from '../utility/env.utility';
 import { AuthService } from './auth.service';
 import { EmailLoginDto } from './dtos/email-login.dto';
 import { EmailRegisterDto } from './dtos/email-register.dto';
+import { VerifyDto } from './dtos/verify.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -57,6 +58,12 @@ export class AuthController {
       response.end();
       throw e;
     }
+  }
+
+  @Post('/verify')
+  @HttpCode(204)
+  async verify(@Body() verifyDto: VerifyDto) {
+    await this.authService.verify(verifyDto);
   }
 
   private setCookie(

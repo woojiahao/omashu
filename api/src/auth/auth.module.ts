@@ -5,6 +5,8 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UsersModule } from '../users/users.module';
 import { envVars } from '../constants';
+import { MailerService } from '../mailer/mailer.service';
+import { MailerSMTPService } from '../mailer/mailer.smtp.service';
 
 @Module({
   imports: [
@@ -18,7 +20,13 @@ import { envVars } from '../constants';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [
+    AuthService,
+    {
+      provide: MailerService,
+      useClass: MailerSMTPService,
+    },
+  ],
   exports: [AuthService],
 })
 export class AuthModule {}
