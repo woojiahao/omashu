@@ -1,3 +1,9 @@
+import ProtectedRoute from "./components/ProtectedRoute";
+
 export default function App() {
-  return <div></div>
+  return (
+    <ProtectedRoute>
+      <div>Hi</div>
+    </ProtectedRoute>
+  )
 }

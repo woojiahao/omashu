@@ -1,13 +1,13 @@
 import { useCallback, useContext, useState, useEffect, createContext } from 'react';
 import { User } from '../api/users/user';
 import { getCurrentUser } from '../api/users/users.api';
-import { loginWithEmail, logoutUser, registerWithEmail } from '../api/auth/auth.api';
+import { RegisterError, loginWithEmail, logoutUser, registerWithEmail } from '../api/auth/auth.api';
 
 export interface UserContextInterface {
   user: User | null;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  register: (username: string, email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<number>;
+  register: (email: string, username: string, password: string) => Promise<null | [number, RegisterError]>;
   logout: () => void;
 }
 
@@ -15,10 +15,10 @@ const UserContext = createContext<UserContextInterface>({
   user: null,
   isLoading: true,
   login: async (email: string, password: string) => {
-    await loginWithEmail(email, password);
+    return await loginWithEmail(email, password);
   },
-  register: async (username: string, email: string, password: string) => {
-    await registerWithEmail(email, username, password);
+  register: async (email: string, username: string, password: string) => {
+    return await registerWithEmail(email, username, password);
   },
   logout: async () => {
     await logoutUser();
@@ -40,15 +40,14 @@ export function UserProvider({ children }: React.PropsWithChildren) {
   }, [])
 
   const login = useCallback(async (email: string, password: string) => {
-    await loginWithEmail(email, password);
-    console.log('hi')
+    const status = await loginWithEmail(email, password);
     setUser(await getCurrentUser());
-    console.log(await getCurrentUser());
+    return status
   }, []);
 
   // TODO: Consider the case of Google auth
   const register = useCallback(async (email: string, username: string, password: string) => {
-    await registerWithEmail(email, username, password);
+    return await registerWithEmail(email, username, password);
   }, []);
 
   const logout = useCallback(async () => {
