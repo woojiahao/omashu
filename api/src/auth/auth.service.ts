@@ -13,9 +13,9 @@ import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { envVars } from '../constants';
 import { MailerService } from '../mailer/mailer.service';
-import { isDecimal } from 'class-validator';
 import { isDevelopment } from '../utility/env.utility';
 import { VerifyDto } from './dtos/verify.dto';
+import { User } from '../users/users.entity';
 
 export interface JwtPayload {
   sub: string;
@@ -32,7 +32,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     @Inject(MailerService) private readonly mailerService: MailerService,
-  ) { }
+  ) {}
 
   /**
    * Registers a user given their email and username and triggers email verification.
@@ -125,6 +125,11 @@ export class AuthService {
     await this.usersService.verifyUser(id);
   }
 
+  resendVerification({ email, username, id }: User) {
+    // Run this in the background to avoid pausing the server just for sending emails
+    this.sendVerificationEmail(email, username, id);
+  }
+
   private async issueTokens(payload: JwtPayload): Promise<JwtTokenPair> {
     const accessToken = await this.generateJwtToken(payload, 60 * 5);
     const refreshToken = await this.generateJwtToken(payload, 60 * 60 * 24 * 7);
@@ -150,16 +155,12 @@ export class AuthService {
     return token;
   }
 
-  private sendVerificationEmail(
-    to: string,
-    username: string,
-    userId: string,
-  ) {
+  private sendVerificationEmail(to: string, username: string, userId: string) {
     const url = isDevelopment()
       ? 'http://localhost:5173/auth/verify?token='
       : `${this.configService.getOrThrow<string>(
-        envVars.this_url,
-      )}/auth/verify?token=`;
+          envVars.this_url,
+        )}/auth/verify?token=`;
 
     const mail = `
     <h3>Thank you for registering with Omashu ${username}!</h3>

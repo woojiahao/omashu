@@ -1,10 +1,19 @@
-import { Body, Controller, HttpCode, Post, Req, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { Request, Response } from 'express';
 import { isDevelopment } from '../utility/env.utility';
 import { AuthService } from './auth.service';
 import { EmailLoginDto } from './dtos/email-login.dto';
 import { EmailRegisterDto } from './dtos/email-register.dto';
 import { VerifyDto } from './dtos/verify.dto';
+import { AuthGuard } from './guards/auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -64,6 +73,14 @@ export class AuthController {
   @HttpCode(204)
   async verify(@Body() verifyDto: VerifyDto) {
     await this.authService.verify(verifyDto);
+  }
+
+  @UseGuards(AuthGuard)
+  @Post('/verify/resend')
+  @HttpCode(204)
+  async resendVerification(@Req() request: Request) {
+    // TODO: Add metrics for how often this is called
+    this.authService.resendVerification(request.user);
   }
 
   private setCookie(
