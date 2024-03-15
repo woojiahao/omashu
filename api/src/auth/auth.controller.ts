@@ -1,18 +1,18 @@
 import { Body, Controller, HttpCode, Post, Req, Res } from '@nestjs/common';
-import { AuthService, JwtTokenPair } from './auth.service';
-import { EmailLoginDto } from './dtos/email-login.dto';
-import { RegisterDto } from './dtos/register.dto';
-import { Response, Request, response } from 'express';
+import { Request, Response } from 'express';
 import { isDevelopment } from '../utility/env.utility';
+import { AuthService } from './auth.service';
+import { EmailLoginDto } from './dtos/email-login.dto';
+import { EmailRegisterDto } from './dtos/email-register.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService) {}
 
-  @Post('/register')
+  @Post('/register/email')
   @HttpCode(204)
-  async register(@Body() registerDto: RegisterDto) {
-    await this.authService.register(registerDto);
+  async registerWithEmail(@Body() registerDto: EmailRegisterDto) {
+    await this.authService.registerWithEmail(registerDto);
   }
 
   @Post('/login/email')
@@ -31,7 +31,7 @@ export class AuthController {
 
   @Post('/login/google')
   @HttpCode(204)
-  async loginWithGoogle() { }
+  async loginWithGoogle() {}
 
   @Post('/logout')
   @HttpCode(204)
@@ -46,7 +46,8 @@ export class AuthController {
   async refresh(@Req() request: Request, @Res() response: Response) {
     const refreshToken = request.cookies['refresh'];
     try {
-      const { accessToken: access, refreshToken: refresh } = await this.authService.refreshToken(refreshToken)
+      const { accessToken: access, refreshToken: refresh } =
+        await this.authService.refreshToken(refreshToken);
       const sameSite = isDevelopment() ? 'none' : 'strict';
       this.setCookie(response, 'access', access, true, sameSite);
       this.setCookie(response, 'refresh', refresh, true, sameSite);
@@ -62,8 +63,9 @@ export class AuthController {
     response: Response,
     key: string,
     value: string,
-    httpOnly: boolean = true,
-    sameSite: boolean | 'lax' | 'strict' | 'none' = 'none') {
+    httpOnly = true,
+    sameSite: boolean | 'lax' | 'strict' | 'none' = 'none',
+  ) {
     response.cookie(key, value, { httpOnly: httpOnly, sameSite: sameSite });
   }
 }

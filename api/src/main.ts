@@ -3,7 +3,6 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import { isDevelopment } from './utility/env.utility';
-import { allow } from 'joi';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -11,7 +10,9 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
 
-  const allowedOrigin = isDevelopment() ? 'http://localhost:5173' : process.env.CLIENT_URL
+  const allowedOrigin = isDevelopment()
+    ? 'http://localhost:5173'
+    : process.env.CLIENT_URL;
   app.enableCors({
     allowedHeaders: ['content-type'],
     origin: allowedOrigin,

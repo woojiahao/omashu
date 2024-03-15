@@ -28,13 +28,13 @@ export class AuthGuard implements CanActivate {
     private configService: ConfigService,
     private usersService: UsersService,
     private reflector: Reflector,
-  ) { }
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
-    ])
+    ]);
 
     const request: Request = context.switchToHttp().getRequest();
     const accessToken = request.cookies['access'];
@@ -45,10 +45,12 @@ export class AuthGuard implements CanActivate {
 
     try {
       if (accessToken) {
-        const payload: JwtPayload =
-          await this.jwtService.verifyAsync(accessToken, {
+        const payload: JwtPayload = await this.jwtService.verifyAsync(
+          accessToken,
+          {
             secret: this.configService.getOrThrow<string>(envVars.jwt_secret),
-          });
+          },
+        );
 
         const user = await this.usersService.getUserById(payload.id);
         request.user = user;

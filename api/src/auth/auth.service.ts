@@ -1,12 +1,11 @@
 import {
-  HttpCode,
   HttpException,
   HttpStatus,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import { RegisterDto } from './dtos/register.dto';
+import { EmailRegisterDto } from './dtos/email-register.dto';
 import { JwtService } from '@nestjs/jwt';
 import { EmailLoginDto } from './dtos/email-login.dto';
 import * as bcrypt from 'bcrypt';
@@ -27,9 +26,9 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private configService: ConfigService,
-  ) { }
+  ) {}
 
-  async register(registerDto: RegisterDto) {
+  async registerWithEmail(registerDto: EmailRegisterDto) {
     if (await this.usersService.getUserByEmail(registerDto.email)) {
       throw new HttpException(
         'User with email already exists',
@@ -44,11 +43,8 @@ export class AuthService {
       );
     }
 
-    let passwordHash: string | null = null;
     const saltRounds = 10;
-    if (registerDto.password) {
-      passwordHash = await bcrypt.hash(registerDto.password, saltRounds);
-    }
+    const passwordHash = await bcrypt.hash(registerDto.password, saltRounds);
 
     await this.usersService.createUser(
       registerDto.email,
@@ -79,9 +75,12 @@ export class AuthService {
 
   async refreshToken(refreshToken: string) {
     try {
-      const payload: JwtPayload = await this.jwtService.verifyAsync(refreshToken, {
-        secret: this.configService.getOrThrow<string>(envVars.jwt_secret),
-      });
+      const payload: JwtPayload = await this.jwtService.verifyAsync(
+        refreshToken,
+        {
+          secret: this.configService.getOrThrow<string>(envVars.jwt_secret),
+        },
+      );
 
       // Reuse the old payload but update the refresh timings
       return await this.issueTokens(payload);
@@ -91,8 +90,7 @@ export class AuthService {
   }
 
   private async issueTokens(payload: JwtPayload): Promise<JwtTokenPair> {
-    // const accessToken = await this.generateJwtToken(payload, 60 * 5);
-    const accessToken = await this.generateJwtToken(payload, 1 * 5);
+    const accessToken = await this.generateJwtToken(payload, 60 * 5);
     const refreshToken = await this.generateJwtToken(payload, 60 * 60 * 24 * 7);
 
     return {

@@ -1,14 +1,12 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
-import { JwtModule, JwtService } from '@nestjs/jwt';
-import { UsersService } from '../users/users.service';
-import { AuthModule } from './auth.module';
-import { UsersModule } from '../users/users.module';
-import { UsersRepository } from '../users/users.repository';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import { Test, TestingModule } from '@nestjs/testing';
 import { Client } from 'pg';
 import { envVars } from '../constants';
+import { UsersRepository } from '../users/users.repository';
+import { UsersService } from '../users/users.service';
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
 
 describe('AuthController', () => {
   let controller: AuthController;

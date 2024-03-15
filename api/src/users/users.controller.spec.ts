@@ -1,12 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtService } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersRepository } from './users.repository';
 import { UsersService } from './users.service';
-import { DatabaseModule } from '../database/database.module';
-import { UsersModule } from './users.module';
-import { databaseProviders } from '../database/database.provider';
 import { Client } from 'pg';
 import { envVars } from '../constants';
 

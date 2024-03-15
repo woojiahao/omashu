@@ -7,7 +7,7 @@ import { Public } from '../metadatas/public.metadata';
 @Controller('users')
 @UseGuards(AuthGuard)
 export class UsersController {
-  constructor(private userService: UsersService) { }
+  constructor(private userService: UsersService) {}
 
   @Public()
   @Get('/current')
