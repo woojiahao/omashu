@@ -50,3 +50,22 @@ export async function refreshToken() {
   const tempApi = generateApi();
   await tempApi.post('/auth/refresh');
 }
+
+export async function verify(token: string) {
+  try {
+    await api.post('/auth/verify', {
+      token
+    })
+
+    return null;
+  } catch (e) {
+    const resp = (e as AxiosError).response;
+    if (!resp) {
+      return 'Something went wrong';
+    }
+
+    const data = resp.data as { message: string };
+
+    return data.message
+  }
+}

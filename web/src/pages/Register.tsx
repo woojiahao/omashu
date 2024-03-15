@@ -4,6 +4,7 @@ import { RegisterError } from "../api/auth/auth.api";
 import Layout from "../components/Layout";
 import UnprotectedRoute from "../components/UnprotectedRoute";
 import { UserContext } from "../contexts/userContext";
+import { navigateWithToast } from '../utilities/navigate';
 
 export default function Register() {
   const [errorCode, setErrorCode] = useState<number | null>(null);
@@ -31,13 +32,7 @@ export default function Register() {
 
     const status = await register(email, username, password);
     if (!status) {
-      navigate({
-        pathname: '/login',
-        search: createSearchParams({
-          'message': 'Account created successfully! Login to your new account',
-          'message-type': 'notification'
-        }).toString()
-      })
+      navigateWithToast(navigate, '/login', 'Account created successfully! Verify your account before logging in. Check your email for further instructions.', 'notification');
     } else {
       const [errorCode, errorMessage] = status;
       setErrorCode(errorCode);

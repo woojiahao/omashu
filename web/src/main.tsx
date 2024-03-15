@@ -9,6 +9,7 @@ import {
 import Login from './pages/Login.tsx'
 import { UserProvider } from './contexts/userContext.tsx'
 import Register from './pages/Register.tsx'
+import VerifyAuth from './pages/VerifyAuth.tsx'
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
   {
     path: '/register',
     element: <Register />
+  },
+  {
+    path: '/auth/verify',
+    element: <VerifyAuth />
   }
 ])
 

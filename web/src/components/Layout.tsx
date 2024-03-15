@@ -6,6 +6,8 @@ interface LayoutProps extends React.PropsWithChildren {
   hasToast?: boolean;
 }
 
+export type ToastMessageType = 'error' | 'success' | 'notification';
+
 export default function Layout({ hasToast = false, children }: LayoutProps) {
   const [searchParams] = useSearchParams();
 
