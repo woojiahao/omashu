@@ -69,3 +69,7 @@ export async function verify(token: string) {
     return data.message
   }
 }
+
+export async function resendVerification() {
+  await api.post('/auth/verify/resend')
+}

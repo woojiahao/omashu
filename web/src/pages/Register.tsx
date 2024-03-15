@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { createSearchParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { RegisterError } from "../api/auth/auth.api";
 import Layout from "../components/Layout";
 import UnprotectedRoute from "../components/UnprotectedRoute";
