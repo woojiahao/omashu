@@ -1,15 +1,15 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { RegisterError } from "../api/auth/auth.api";
 import Layout from "../components/Layout";
 import UnprotectedRoute from "../components/UnprotectedRoute";
-import { useUserContext } from "../contexts/userContext";
+import { UserContext } from "../contexts/userContext";
 
 export default function Register() {
   const [errorCode, setErrorCode] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<RegisterError | null>(null);
 
-  const { register } = useUserContext();
+  const { register } = useContext(UserContext);
   const navigate = useNavigate();
 
   async function loginUser(e: React.FormEvent<HTMLFormElement>) {
@@ -28,11 +28,6 @@ export default function Register() {
       password: { value: password },
       username: { value: username }
     } = target;
-
-    const isEmailEmpty = email.trim().length === 0;
-    const isUsernameEmpty = username.trim().length === 0;
-    const isPasswordEmpty = password.trim().length === 0;
-    if (isEmailEmpty || isUsernameEmpty || isPasswordEmpty) return;
 
     const status = await register(email, username, password);
     if (!status) {

@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState, useEffect, createContext } from 'react';
+import { useCallback, useState, useEffect, createContext } from 'react';
 import { User } from '../api/users/user';
 import { getCurrentUser } from '../api/users/users.api';
 import { RegisterError, loginWithEmail, logoutUser, registerWithEmail } from '../api/auth/auth.api';
@@ -11,7 +11,7 @@ export interface UserContextInterface {
   logout: () => void;
 }
 
-const UserContext = createContext<UserContextInterface>({
+export const UserContext = createContext<UserContextInterface>({
   user: null,
   isLoading: true,
   login: async (email: string, password: string) => {
@@ -66,5 +66,3 @@ export function UserProvider({ children }: React.PropsWithChildren) {
     {children}
   </UserContext.Provider >)
 }
-
-export const useUserContext = () => useContext(UserContext);

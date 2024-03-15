@@ -1,25 +1,19 @@
 import { useNavigate } from "react-router-dom";
-import { useUserContext } from "../contexts/userContext"
-import { useEffect } from "react";
+import { UserContext } from "../contexts/userContext"
+import { useContext, useEffect } from "react";
 
 /**
  * Represents a route that should auto-redirect to / if the user is already logged in.
  */
 export default function UnprotectedRoute({ children }: React.PropsWithChildren) {
-  const { user, isLoading } = useUserContext();
+  const { user, isLoading } = useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!isLoading && user) {
       navigate('/');
     }
-  }, [user])
-
-  useEffect(() => {
-    if (!isLoading && user) {
-      navigate('/');
-    }
-  }, [isLoading])
+  }, [user, isLoading])
 
   if (!isLoading && user) {
     navigate('/');

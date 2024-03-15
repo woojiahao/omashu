@@ -9,7 +9,6 @@ import {
 import Login from './pages/Login.tsx'
 import { UserProvider } from './contexts/userContext.tsx'
 import Register from './pages/Register.tsx'
-import { toast } from 'react-toastify'
 
 const router = createBrowserRouter([
   {

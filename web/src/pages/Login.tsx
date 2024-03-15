@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import Layout from "../components/Layout";
 import UnprotectedRoute from "../components/UnprotectedRoute";
-import { useUserContext } from "../contexts/userContext";
+import { UserContext } from "../contexts/userContext";
 
 export default function Login() {
   const [error, setError] = useState<number | null>(null);
-  const { login } = useUserContext();
+  const { login } = useContext(UserContext);
   const navigate = useNavigate();
 
   async function loginUser(e: React.FormEvent<HTMLFormElement>) {
